@@ -1,7 +1,7 @@
 # Label Arrows
 Draw and style arrows between labels.
 
-# Example
+## Example
 ```typst
 #import "@preview/larrow:1.0.0": *
 #set page(width: 16cm, height: 5cm, margin: (left: 1cm))
@@ -28,7 +28,7 @@ Draw and style arrows between labels.
 
 ![Example output of larrow](./example/example.png)
 
-# Quick overview
+## Quick overview
 - Import via `#import "@preview/larrow:1.0.0"`.
 - Use `label-arrow(<from-lbl>, <to-lbl>)` to draw an arrow between two labels.
 - Use the `bend` parameter to curve the arrow. Positive values make a
@@ -40,11 +40,11 @@ Draw and style arrows between labels.
 - If there is too much whitespace at the location of a label, remove spaces
   around it.
 
-# Usage
-## Import
+## Usage
+### Import
 `#import "@preview/larrow:1.0.0": *`
 
-## Functionality
+### Functionality
 The package makes available two key functions. `label-arrow()` draws arrows
 between labels in your document. `arrow-label()` is a special kind of label
 that you can define spacial offsets on for your position anchors. Standard
@@ -54,7 +54,7 @@ One important thing to keep in mind is that all labels used for drawing arrows
 should be unique, as otherwise only the first occurence will be found as a
 target.
 
-### label-arrow()
+#### label-arrow()
 This function draws a directional arrow from the provided starting point
 (argument `from`) to the provided stopping point (argument `to`).
 
@@ -109,7 +109,7 @@ discussed ones below:
   blue.
     - Default value: `false`
 
-### arrow-label()
+#### arrow-label()
 This function creates a label with attached metadata about offsets for the
 position it indicates. None, either or both offsets can be given.
 
@@ -127,13 +127,13 @@ Parameters for arrow labels are as follows:
 - `dy` (optional) - Y-axis offset for the arrow label. Works the same as `dx`.
     - Default value: `0pt`
 
-### Shorthands
+#### Shorthands
 There are shortened aliases for both `label-arrow` and `arrow-label`.
 
 - `label-arrow()` can also be called as `larw()`.
 - `arrow-label()` can also be called as `al()`.
 
-## Set and show alternatives
+### Set and show alternatives
 Neither `#set` nor `#show` can be used with `label-arrow()` or `arrow-label()`.
 To set default values or make custom variants with defaults, you can use `#let`
 instead to overwrite them with given parameter values:
@@ -148,7 +148,7 @@ instead to overwrite them with given parameter values:
 #let arrow-label = arrow-label.with(dy: -1mm)
 ```
 
-# Limitations
+## Limitations
 Drawing arrows across multiple pages is not supported. If labels are separated
 by page boundaries, the resulting drawing will be unpredictable.
 
@@ -165,7 +165,7 @@ the whole preceeding paragraph. Use `arrow-label`s to prevent this or put `~`
 or `#sym.zws` before or after the specific labels to try and give them
 something to attach to at the correct position.
 
-# Local package
+## Local package
 If you want to use the package locally, you have two options:
 
 1. Download and extract the package folder to your chosen package namespace.
