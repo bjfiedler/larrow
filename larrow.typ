@@ -4,7 +4,9 @@
 
 #let label-arrow(from, to, bend: 0, tip: "straight", from-tip: none,
                  both-tip: none, stroke: auto, from-offset: (0pt, 0pt),
-                 to-offset: (0pt, 0pt), both-offset: (0pt, 0pt), debug: false
+                 to-offset: (0pt, 0pt), both-offset: (0pt, 0pt),
+                 mode: "bezier", direction: "-|",
+                 debug: false,
 ) = context {
     // Where the function call is in the layout. Necessary to place the canvas
     // in the top left corner of the page later.
@@ -73,32 +75,38 @@
     control-x = midpoint-x + unit-diff-y * bend
     control-y = midpoint-y + -1 * unit-diff-x * bend
 
+    // If tips aren't set together, draw individual marks.
+    // Otherwise, draw both-tip for both ends.
+    let mark = if (both-tip == none) {(start: from-tip, end: tip)} else {(symbol: both-tip)}
+
     // Actual drawing of curve.
     place(dx: -1 * here-loc.x, dy: -1 * here-loc.y, cetz.canvas(length: 1pt, {
         // Only import necessary components for example not to override
         // standard stroke definition.
-        import cetz.draw: rect, bezier, circle
+        import cetz.draw: rect, bezier, circle, line
         // This rectangle is used to force the cetz canvas to take the size of
         // the entire page and thus properly locate coordinates from base typst
         // on the page.
         rect((0, 0), (page.width, page.height), stroke: none)
-        // If tips aren't set together, draw individual marks.
-        if both-tip == none {
+        if mode == "bezier" {
             // This bezier curve is the actual arrow.
             bezier((fx, fy), (tx, ty), (control-x, control-y),
-                   mark: (start: from-tip, end: tip), stroke: stroke
-            )
-        } else { // Otherwise, draw both-tip for both ends.
-            bezier((fx, fy), (tx, ty), (control-x, control-y),
-                   mark: (symbol: both-tip), stroke: stroke
-            )
+                   mark: mark, stroke: stroke
+            )}
+        else if mode == "perpendicular" {
+            line((fx,fy), ((), direction, (tx,ty)), (tx,ty), mark: mark, stroke: stroke)
         }
+        else {panic("unsupportet mode")}
         // If debugging was turned on for the arrow, the starting and end
         // points as well as the control point is marked.
         if debug {
             circle((fx, fy), stroke: green)
             circle((tx, ty), stroke: red)
-            circle((control-x, control-y), stroke: blue)
+            if mode == "bezier" {
+                circle((control-x, control-y), stroke: blue)
+            } else if mode == "perpendicular" {
+                circle(((fx,fy), direction, (tx,ty)), stroke: blue)
+            }
         }
     }))
 }
